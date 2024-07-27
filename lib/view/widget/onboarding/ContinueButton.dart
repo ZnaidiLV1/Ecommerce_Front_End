@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontendproject/controller/DotsController.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/data/datasource/static.dart';
+import 'package:frontendproject/view/screen/auth/login.dart';
 
 class ContinueButton extends StatefulWidget {
   final PageController pageController;
@@ -15,11 +16,7 @@ class ContinueButton extends StatefulWidget {
 }
 
 class _ContinueButtonState extends State<ContinueButton> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +35,9 @@ class _ContinueButtonState extends State<ContinueButton> {
                 widget.pageController.animateToPage(nextPage,
                     duration: Duration(seconds: 1), curve: Curves.easeInOut);
                 context.read<PageBloc>().add(pageChanged(nextPage));
+              } else {
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => login()));
               }
             },
             child: Text(
