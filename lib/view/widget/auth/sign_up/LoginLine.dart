@@ -15,7 +15,7 @@ class _loginLineState extends State<loginLine> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Don't Have An Account ?",
+        Text("You Have An Account ?",
             style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 18,
@@ -28,7 +28,7 @@ class _loginLineState extends State<loginLine> {
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => login()));
             },
-            child: Text("Sign Up",
+            child: Text("Sign In",
                 style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 18,

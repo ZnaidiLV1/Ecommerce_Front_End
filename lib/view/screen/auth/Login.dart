@@ -1,7 +1,9 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
 import 'package:frontendproject/core/constant/colors.dart';
+import 'package:frontendproject/core/functions/AlertExit.dart';
+import 'package:frontendproject/view/screen/auth/ForgetPassword.dart';
 import 'package:frontendproject/view/widget/auth/login/BodyText.dart';
 import 'package:frontendproject/view/widget/auth/login/LoginButton.dart';
 import 'package:frontendproject/view/widget/auth/login/SignUpLine.dart';
@@ -29,7 +31,7 @@ class _loginState extends State<login> {
                 color: Colors.white)),
         centerTitle: true,
       ),
-      body: ListView(
+      body: WillPopScope(child: ListView(
         children: [
           topDesign(),
           Container(
@@ -49,18 +51,27 @@ class _loginState extends State<login> {
           textField(
               hinttext: "Eneter your Email",
               labeltext: "Email",
-              iconData: Icons.email),
+              iconData: Icons.email, 
+              keyboardtype: TextInputType.emailAddress, showData: true,),
           textField(
               hinttext: "Eneter your Password",
               labeltext: "Password",
-              iconData: Icons.password),
+              iconData: Icons.password,
+              keyboardtype: TextInputType.emailAddress, showData: true,),
           Padding(
             padding: const EdgeInsets.only(
               right: 10,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [Text("Forgot Password")],
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => forgetPassword()));
+                    },
+                    child: Text("Forgot Password"))
+              ],
             ),
           ),
           SizedBox(
@@ -72,7 +83,7 @@ class _loginState extends State<login> {
           ),
           signUpLine()
         ],
-      ),
+      ), onWillPop: alertExit),
     );
   }
 }

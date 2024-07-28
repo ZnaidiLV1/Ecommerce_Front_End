@@ -42,19 +42,23 @@ class _signUpState extends State<signUp> {
           textField(
               hinttext: "Eneter your Username",
               labeltext: "Username",
-              iconData: Icons.person),
+              iconData: Icons.person,
+              keyboardtype: TextInputType.text, showData: true,),
           textField(
               hinttext: "Eneter your Phone",
               labeltext: "Phone",
-              iconData: Icons.phone),
+              iconData: Icons.phone,
+              keyboardtype: TextInputType.number, showData: true,),
           textField(
               hinttext: "Eneter your Email",
               labeltext: "Email",
-              iconData: Icons.email),
+              iconData: Icons.email,
+              keyboardtype: TextInputType.emailAddress, showData: true,),
           textField(
               hinttext: "Eneter your Password",
               labeltext: "Password",
-              iconData: Icons.password),
+              iconData: Icons.password,
+              keyboardtype: TextInputType.emailAddress, showData: false,),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.04,
           ),
