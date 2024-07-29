@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontendproject/bindings.dart';
 import 'package:frontendproject/controller/DotsController.dart';
+import 'package:frontendproject/controller/midleware.dart';
 import 'package:frontendproject/core/blocservice/Services.dart';
 import 'package:frontendproject/core/localisation/ChangeLocal.dart';
 import 'package:frontendproject/core/localisation/MyTranslation.dart';
-import 'package:frontendproject/view/screen/ChooseLanguage.dart';
+import 'package:frontendproject/view/screen/LaunchingScreen.dart';
 import 'package:get/get.dart';
 
 void main() async {
@@ -14,6 +15,7 @@ void main() async {
   runApp(MyApp());
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   MyApp({super.key});
   localeController locale = Get.put(localeController());
@@ -23,7 +25,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => PageBloc(),
+          
         ),
+        BlocProvider(create: (_)=>MidlewareBloc()..add(MidlewareEvent())),
       ],
       child: GetMaterialApp(
         initialBinding: InitialBinding(),
@@ -31,7 +35,7 @@ class MyApp extends StatelessWidget {
         translations: myTranslation(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: chooseLanguage(),
+        home: launchingScreen(),
       ),
     );
   }

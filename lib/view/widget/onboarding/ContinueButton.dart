@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontendproject/controller/DotsController.dart';
+import 'package:frontendproject/controller/midleware.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/data/datasource/static.dart';
 import 'package:frontendproject/view/screen/auth/login.dart';
@@ -16,10 +17,9 @@ class ContinueButton extends StatefulWidget {
 }
 
 class _ContinueButtonState extends State<ContinueButton> {
-
-
   @override
   Widget build(BuildContext context) {
+    final MidlewareBloc midleware = BlocProvider.of<MidlewareBloc>(context);
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       decoration: BoxDecoration(
@@ -36,6 +36,7 @@ class _ContinueButtonState extends State<ContinueButton> {
                     duration: Duration(seconds: 1), curve: Curves.easeInOut);
                 context.read<PageBloc>().add(pageChanged(nextPage));
               } else {
+                midleware.setOnBoardingSeen();
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => login()));
               }

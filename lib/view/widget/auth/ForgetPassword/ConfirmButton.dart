@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/view/screen/auth/VerifyCode.dart';
 
+// ignore: must_be_immutable
 class confirmButton extends StatefulWidget {
   String email;
    confirmButton({super.key,required this.email});
