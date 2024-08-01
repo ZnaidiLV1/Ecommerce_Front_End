@@ -13,6 +13,10 @@ class signUp extends StatefulWidget {
 }
 
 class _signUpState extends State<signUp> {
+  TextEditingController email = TextEditingController();
+   TextEditingController username = TextEditingController();
+    TextEditingController phoneNumber = TextEditingController();
+     TextEditingController password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,29 +44,39 @@ class _signUpState extends State<signUp> {
             ),
           ),
           textField(
-              hinttext: "Eneter your Username",
-              labeltext: "Username",
-              iconData: Icons.person,
-              keyboardtype: TextInputType.text, showData: true,),
+            mycontroller: username,
+            hinttext: "Eneter your Username",
+            labeltext: "Username",
+            iconData: Icons.person,
+            keyboardtype: TextInputType.text,
+            showData: true,
+          ),
           textField(
-              hinttext: "Eneter your Phone",
-              labeltext: "Phone",
-              iconData: Icons.phone,
-              keyboardtype: TextInputType.number, showData: true,),
-          textField(
-              hinttext: "Eneter your Email",
-              labeltext: "Email",
-              iconData: Icons.email,
-              keyboardtype: TextInputType.emailAddress, showData: true,),
-          textField(
-              hinttext: "Eneter your Password",
-              labeltext: "Password",
-              iconData: Icons.password,
-              keyboardtype: TextInputType.emailAddress, showData: false,),
+            mycontroller: phoneNumber,
+            hinttext: "Eneter your Phone",
+            labeltext: "Phone",
+            iconData: Icons.phone,
+            keyboardtype: TextInputType.number,
+            showData: true,
+          ),
+          textField(mycontroller: email,
+            hinttext: "Eneter your Email",
+            labeltext: "Email",
+            iconData: Icons.email,
+            keyboardtype: TextInputType.emailAddress,
+            showData: true,
+          ),
+          textField(mycontroller: password,
+            hinttext: "Eneter your Password",
+            labeltext: "Password",
+            iconData: Icons.password,
+            keyboardtype: TextInputType.emailAddress,
+            showData: false,
+          ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.04,
           ),
-          signUpButton(),
+          signUpButton(emailField: email.text , passwordField: password.text, phoneField: phoneNumber.text, usernameField: username.text,),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
           ),

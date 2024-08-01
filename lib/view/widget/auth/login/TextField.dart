@@ -32,7 +32,7 @@ class _textFieldState extends State<textField> {
       child: TextFormField(
         controller: widget.mycontroller,
         keyboardType: widget.keyboardtype,
-        obscureText: widget.showData,
+        obscureText: !widget.showData,
         decoration: InputDecoration(
           hintText: widget.hinttext,
           hintStyle: const TextStyle(fontSize: 14),

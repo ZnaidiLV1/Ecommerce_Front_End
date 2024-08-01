@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontendproject/bindings.dart';
 import 'package:frontendproject/controller/DotsController.dart';
 import 'package:frontendproject/controller/midleware.dart';
+import 'package:frontendproject/controller/refreshTokenController.dart';
 import 'package:frontendproject/core/blocservice/Services.dart';
 import 'package:frontendproject/core/localisation/ChangeLocal.dart';
 import 'package:frontendproject/core/localisation/MyTranslation.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
           
         ),
         BlocProvider(create: (_)=>MidlewareBloc()..add(MidlewareEvent())),
+        BlocProvider(create: (_)=>TokenBloc()),
       ],
       child: GetMaterialApp(
         initialBinding: InitialBinding(),
