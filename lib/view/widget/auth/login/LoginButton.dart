@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontendproject/controller/LoadingController.dart';
 
 import 'package:frontendproject/core/constant/ClientSingleton.dart';
 import 'package:frontendproject/core/constant/Urls.dart';
@@ -38,21 +40,41 @@ class _loginButtonState extends State<loginButton> {
               borderRadius: BorderRadius.circular(15)),
           child: MaterialButton(
             onPressed: () async {
-              var response = await HttpClientManager.client
-                  .post(Urls.loginUri(), body: {
-                "email": widget.emailField,
-                "password": widget.passwordField
-              });
-              if (response.statusCode == 200) {
-                var responseData = json.decode(response.body);
-                var refreshToken = responseData["refresh"];
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) =>
-                        firstPage(refreshToken: refreshToken)));
-              } else if (response.statusCode == 401) {
-                custumizedDialog(context, "Authentication Error",
-                    "Incorrect email or password. Please try again.");
-              }
+              context.read<LoadingController>().add(startLoading());
+
+              
+                var response = await HttpClientManager.client.post(
+                  Urls.loginUri(),
+                  body: {
+                    "email": widget.emailField,
+                    "password": widget.passwordField,
+                  },
+                );
+
+               
+                  context.read<LoadingController>().add(stopLoading());
+                  if (response.statusCode == 200) {
+                    var responseData = json.decode(response.body);
+                    var refreshToken = responseData["refresh"];
+                    
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            firstPage(refreshToken: refreshToken),
+                      ),
+                    );
+                  } else if (response.statusCode == 401) {
+                    custumizedDialog(
+                      context,
+                      "Authentication Error",
+                      "Incorrect email or password. Please try again.",
+                    );
+                  } else {
+                    print('Failed to login: ${response.statusCode}');
+                    print('Response body: ${response.body}');
+                  }
+                
+              
             },
             child: Text(
               "Login",

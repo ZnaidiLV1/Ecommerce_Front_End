@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontendproject/bindings.dart';
 import 'package:frontendproject/controller/DotsController.dart';
+import 'package:frontendproject/controller/LoadingController.dart';
 import 'package:frontendproject/controller/midleware.dart';
 import 'package:frontendproject/controller/refreshTokenController.dart';
 import 'package:frontendproject/core/blocservice/Services.dart';
@@ -26,8 +27,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => PageBloc(),
-          
         ),
+        BlocProvider(create: (_)=>LoadingController()),
         BlocProvider(create: (_)=>MidlewareBloc()..add(MidlewareEvent())),
         BlocProvider(create: (_)=>TokenBloc()),
       ],

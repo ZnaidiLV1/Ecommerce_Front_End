@@ -1,17 +1,30 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
+import 'package:frontendproject/core/constant/ClientSingleton.dart';
+import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
+import 'package:frontendproject/view/widget/auth/anonyme/FirstPage.dart';
 import 'package:frontendproject/view/widget/auth/login/TextField.dart';
 
+// ignore: must_be_immutable
 class resetPassword extends StatefulWidget {
-  const resetPassword({super.key});
+  String email;
+  resetPassword({
+    Key? key,
+    required this.email,
+  }) : super(key: key);
 
   @override
   State<resetPassword> createState() => _resetPasswordState();
 }
 
 class _resetPasswordState extends State<resetPassword> {
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,10 +49,13 @@ class _resetPasswordState extends State<resetPassword> {
                     color: Colors.black)),
           ),
           textField(
-              hinttext: "Write Your Password",
-              labeltext: "",
-              iconData: Icons.password,
-              keyboardtype: TextInputType.emailAddress, showData: false,),
+            mycontroller: passwordController,
+            hinttext: "Write Your Password",
+            labeltext: "",
+            iconData: Icons.password,
+            keyboardtype: TextInputType.emailAddress,
+            showData: false,
+          ),
           Container(
             padding: EdgeInsets.only(left: 18),
             child: Text("Confirm Password",
@@ -50,10 +66,12 @@ class _resetPasswordState extends State<resetPassword> {
                     color: Colors.black)),
           ),
           textField(
-              hinttext: "Rewrite Your Password",
-              labeltext: "",
-              iconData: Icons.password,
-              keyboardtype: TextInputType.emailAddress, showData: false,),
+            hinttext: "Rewrite Your Password",
+            labeltext: "",
+            iconData: Icons.password,
+            keyboardtype: TextInputType.emailAddress,
+            showData: false,
+          ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.01,
           ),
@@ -65,9 +83,29 @@ class _resetPasswordState extends State<resetPassword> {
                     color: ConstColors.primarycolor,
                     borderRadius: BorderRadius.circular(30)),
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    var response = await HttpClientManager.client
+                        .post(Urls.resetPassword(), body: {
+                      "email": widget.email,
+                      "new_password": passwordController.text
+                    });
+                    if (response.statusCode == 200) {
+                      var loginresponse = await HttpClientManager.client
+                          .post(Urls.loginUri(), body: {
+                        "email": widget.email,
+                        "password": passwordController.text
+                      });
+                      if(loginresponse.statusCode==200)
+                      {
+                        var data=json.decode(loginresponse.body);
+                        String refreshToken=data["refresh"];
+                        Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => firstPage(refreshToken: refreshToken)));
+                      }
+                    }
+                  },
                   child: Text(
-                    "Login",
+                    "Reset",
                     style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 25,

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:frontendproject/core/constant/ClientSingleton.dart';
+import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
-import 'package:frontendproject/view/screen/auth/VerifyCode.dart';
+import 'package:frontendproject/core/functions/CustumizedDialog.dart';
+import 'package:frontendproject/view/screen/auth/VerfiyPassword.dart';
 
 // ignore: must_be_immutable
 class confirmButton extends StatefulWidget {
   String email;
-   confirmButton({super.key,required this.email});
+  confirmButton({super.key, required this.email});
 
   @override
   State<confirmButton> createState() => _confirmButtonState();
@@ -22,9 +25,20 @@ class _confirmButtonState extends State<confirmButton> {
               color: ConstColors.primarycolor,
               borderRadius: BorderRadius.circular(15)),
           child: MaterialButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => verifyCode(email: widget.email,)));
+            onPressed: () async {
+              var response = await HttpClientManager.client
+                  .post(Urls.sendVerificationCode(), body: {
+                "email": widget.email,
+              });
+              if ((response.statusCode == 200)) {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => verifyPassword(
+                          email: widget.email,
+                        )));
+              } else {
+                custumizedDialog(
+                    context, "Recheck the email", "email not found");
+              }
             },
             child: Text(
               "Check",

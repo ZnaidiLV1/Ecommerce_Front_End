@@ -20,4 +20,8 @@ class Urls {
   static Uri verifyCode() {
     return Uri.parse("${server}api/verifyCode/");
   }
+
+  static Uri resetPassword() {
+    return Uri.parse("${server}api/reset_password/");
+  }
 }

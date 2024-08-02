@@ -7,7 +7,7 @@ import 'package:frontendproject/view/widget/auth/ForgetPassword/ConfirmButton.da
 import 'package:frontendproject/view/widget/auth/login/TextField.dart';
 
 class forgetPassword extends StatefulWidget {
-  const forgetPassword({super.key});
+   forgetPassword({super.key});
 
   @override
   State<forgetPassword> createState() => _forgetPasswordState();

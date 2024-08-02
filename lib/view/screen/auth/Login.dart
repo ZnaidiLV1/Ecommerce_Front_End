@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontendproject/controller/LoadingController.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/functions/AlertExit.dart';
+import 'package:frontendproject/core/shared/LoadingIndicator.dart';
 import 'package:frontendproject/view/screen/auth/ForgetPassword.dart';
 import 'package:frontendproject/view/widget/auth/login/BodyText.dart';
 import 'package:frontendproject/view/widget/auth/login/LoginButton.dart';
@@ -18,8 +21,16 @@ class login extends StatefulWidget {
 }
 
 class _loginState extends State<login> {
-  TextEditingController emailcontroller=TextEditingController();
-  TextEditingController passwordcontroller=TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BlocProvider.of<LoadingController>(context).add(stopLoading());
+  }
+
+
+  TextEditingController emailcontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,62 +44,83 @@ class _loginState extends State<login> {
                 color: Colors.white)),
         centerTitle: true,
       ),
-      body: WillPopScope(child: ListView(
-        children: [
-          topDesign(),
-          Container(
-            color: ConstColors.primarycolor,
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.13,
-              decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                  borderRadius:
-                      BorderRadius.only(topLeft: Radius.circular(120))),
-            ),
-          ),
-          bodyText(),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
-          ),
-          textField(
-            mycontroller:emailcontroller,
-              hinttext: "Eneter your Email",
-              labeltext: "Email",
-              iconData: Icons.email, 
-              keyboardtype: TextInputType.emailAddress, showData: true,),
-          textField(
-            mycontroller: passwordcontroller,
-              hinttext: "Eneter your Password",
-              labeltext: "Password",
-              iconData: Icons.password,
-              keyboardtype: TextInputType.emailAddress, showData: false,),
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 10,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => forgetPassword()));
-                    },
-                    child: Text("Forgot Password"))
-              ],
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.04,
-          ),
-          loginButton(emailField: emailcontroller.text, passwordField: 
-          passwordcontroller.text,),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
-          ),
-          signUpLine()
-        ],
-      ), onWillPop: alertExit),
+      body: BlocConsumer<LoadingController, LoadingState>(
+        builder: (BuildContext context, state) {
+          if (state is LoadingInProgress) {
+            return LoadingIndicator();
+          } else if (state is LoadingDone) {
+            return WillPopScope(
+                child: ListView(
+                  children: [
+                    topDesign(),
+                    Container(
+                      color: ConstColors.primarycolor,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.13,
+                        decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(120))),
+                      ),
+                    ),
+                    bodyText(),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.05,
+                    ),
+                    textField(
+                      mycontroller: emailcontroller,
+                      hinttext: "Eneter your Email",
+                      labeltext: "Email",
+                      iconData: Icons.email,
+                      keyboardtype: TextInputType.emailAddress,
+                      showData: true,
+                    ),
+                    textField(
+                      mycontroller: passwordcontroller,
+                      hinttext: "Eneter your Password",
+                      labeltext: "Password",
+                      iconData: Icons.password,
+                      keyboardtype: TextInputType.emailAddress,
+                      showData: false,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        right: 10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => forgetPassword()));
+                              },
+                              child: Text("Forgot Password"))
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                    ),
+                    loginButton(
+                      emailField: emailcontroller.text,
+                      passwordField: passwordcontroller.text,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.05,
+                    ),
+                    signUpLine()
+                  ],
+                ),
+                onWillPop: alertExit);
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+        listener: (BuildContext context, LoadingState state) {
+          print("hi");
+        },
+      ),
     );
   }
 }
