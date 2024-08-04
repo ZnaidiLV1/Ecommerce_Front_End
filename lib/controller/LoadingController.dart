@@ -1,38 +1,22 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+abstract class LoadingEvent {}
 
-abstract class LoadingEvent extends Equatable {
-   @override
-  List<Object?> get props => [];
-}
+class StartLoading extends LoadingEvent {}
 
-class startLoading extends LoadingEvent {
-  @override
-  List<Object?> get props => [];
-}
+class StopLoading extends LoadingEvent {}
 
-class stopLoading extends LoadingEvent {
-  @override
-  List<Object?> get props => [];
-}
-
-class LoadingState extends Equatable {
-  const LoadingState();
-  @override
-  List<Object?> get props => [];
-}
+abstract class LoadingState {}
 
 class LoadingInitial extends LoadingState {}
 
+class LoadingInProgress extends LoadingState {}
+
 class LoadingDone extends LoadingState {}
 
-class LoadingInProgress extends LoadingState {}
 
 class LoadingController extends Bloc<LoadingEvent, LoadingState> {
   LoadingController() : super(LoadingInitial()) {
-    on<stopLoading>((event, emit) => emit(LoadingDone()));
-    on<startLoading>((event, emit) => emit(LoadingInProgress()));
+    on<StartLoading>((event, emit) => emit(LoadingInProgress()));
+    on<StopLoading>((event, emit) => emit(LoadingDone()));
   }
-
-  
 }
