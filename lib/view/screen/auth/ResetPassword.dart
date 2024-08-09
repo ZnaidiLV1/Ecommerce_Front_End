@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:frontendproject/core/constant/ClientSingleton.dart';
 import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
-import 'package:frontendproject/view/widget/auth/anonyme/FirstPage.dart';
+import 'package:frontendproject/view/screen/Home/HomePage.dart';
 import 'package:frontendproject/view/widget/auth/login/TextField.dart';
 
 // ignore: must_be_immutable
@@ -100,7 +100,7 @@ class _resetPasswordState extends State<resetPassword> {
                         var data=json.decode(loginresponse.body);
                         String refreshToken=data["refresh"];
                         Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => firstPage(refreshToken: refreshToken)));
+                  MaterialPageRoute(builder: (context) => homePage(refreshToken: refreshToken)));
                       }
                     }
                   },

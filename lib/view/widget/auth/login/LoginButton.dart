@@ -6,7 +6,7 @@ import 'package:frontendproject/core/constant/ClientSingleton.dart';
 import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/functions/CustumizedDialog.dart';
-import 'package:frontendproject/view/widget/auth/anonyme/FirstPage.dart';
+import 'package:frontendproject/view/screen/Home/HomePage.dart';
 
 class loginButton extends StatefulWidget {
   TextEditingController emailField;
@@ -48,8 +48,10 @@ class _loginButtonState extends State<loginButton> {
                     var response = await HttpClientManager.client.post(
                       Urls.loginUri(),
                       body: {
-                        "email": widget.emailField.text,
-                        "password": widget.passwordField.text,
+                        // "email": widget.emailField.text,
+                        // "password": widget.passwordField.text,
+                        "email":"vegasznaidi@gmail.com",
+                        "password":"2002 Znaidi" ,
                       },
                     );
                     if (!mounted) {
@@ -66,7 +68,7 @@ class _loginButtonState extends State<loginButton> {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) =>
-                              firstPage(refreshToken: refreshToken),
+                              homePage(refreshToken: refreshToken),
                         ),
                       );
                     } else if (response.statusCode == 401) {

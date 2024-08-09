@@ -10,7 +10,7 @@ import 'package:frontendproject/core/constant/ClientSingleton.dart';
 import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/functions/CustumizedDialog.dart';
-import 'package:frontendproject/view/widget/auth/anonyme/FirstPage.dart';
+import 'package:frontendproject/view/screen/Home/HomePage.dart';
 
 // ignore: must_be_immutable
 class verifyEmail extends StatefulWidget {
@@ -89,7 +89,7 @@ class _verifyEmailState extends State<verifyEmail> {
                     var data = json.decode(responseLogin.body);
                     String refreshToken = data["refresh"];
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => firstPage(
+                        builder: (context) => homePage(
                               refreshToken: refreshToken,
                             )));
                   }
