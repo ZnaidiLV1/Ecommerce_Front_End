@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/view/screen/Home/HomePage/Home.dart';
 
 class homePage extends StatefulWidget {
@@ -13,11 +14,12 @@ class homePage extends StatefulWidget {
   State<homePage> createState() => _homePageState();
 }
 
-List widgets = [home()];
+List widgets = [home(), Placeholder(), Placeholder()];
 
 class _homePageState extends State<homePage> {
   void onTapped(index_tapped) {
     setState(() {
+      print("index tapped $index_tapped");
       index = index_tapped;
     });
   }
@@ -27,22 +29,31 @@ class _homePageState extends State<homePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: widgets[index],
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: onTapped,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+        child: BottomNavigationBar(
+          currentIndex: index,
+          selectedItemColor: ConstColors.primarycolor,
+          unselectedItemColor: Colors.grey[500],
+          iconSize: 28,
+          onTap: onTapped,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+              ),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+        ),
       ),
     );
   }

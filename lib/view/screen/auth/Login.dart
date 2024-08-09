@@ -41,6 +41,7 @@ class _loginState extends State<login> {
     return BlocProvider(
       create: (context) => LoadingController(),
       child: Scaffold(
+        backgroundColor: ConstColors.secondcolor,
         appBar: AppBar(
           backgroundColor: ConstColors.primarycolor,
           title: Text(
@@ -64,7 +65,7 @@ class _loginState extends State<login> {
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.13,
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 255, 255),
+                    color: ConstColors.secondcolor,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(120),
                     ),

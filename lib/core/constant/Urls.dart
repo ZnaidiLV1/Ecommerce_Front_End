@@ -24,4 +24,10 @@ class Urls {
   static Uri resetPassword() {
     return Uri.parse("${server}api/reset_password/");
   }
+  static Uri get_cat() {
+    return Uri.parse("${server}app1/get_cat/");
+  }
+   static Uri create_cat() {
+    return Uri.parse("${server}app1/create_cat/");
+  }
 }
