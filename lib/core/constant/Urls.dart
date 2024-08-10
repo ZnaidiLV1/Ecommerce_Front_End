@@ -30,4 +30,7 @@ class Urls {
    static Uri create_cat() {
     return Uri.parse("${server}app1/create_cat/");
   }
+  static Uri get_items(String item_cat) {
+    return Uri.parse("${server}app1/${item_cat}-get_items/");
+  }
 }
