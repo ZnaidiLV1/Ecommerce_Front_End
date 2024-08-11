@@ -33,4 +33,8 @@ class Urls {
   static Uri get_items(String item_cat) {
     return Uri.parse("${server}app1/${item_cat}-get_items/");
   }
+  static Uri update_favorite() {
+    return Uri.parse("${server}app1/update_favorite/");
+  }
+
 }

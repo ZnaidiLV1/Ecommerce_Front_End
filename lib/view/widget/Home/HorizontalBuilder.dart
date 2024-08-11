@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:frontendproject/core/constant/ClientSingleton.dart';
+import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/serializer/category.dart';
 
 class HorizontalBuilder extends StatefulWidget {
@@ -35,7 +37,6 @@ class _HorizontalBuilderState extends State<HorizontalBuilder> {
             return Center(child: Text('No categories found'));
           } else {
             List<category> categories = snapshot.data!;
-            
             return ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: categories.length,
@@ -52,10 +53,17 @@ class _HorizontalBuilderState extends State<HorizontalBuilder> {
                             isSelected ? FontWeight.bold : FontWeight.w400,
                       ),
                     ),
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = index;
-                      });
+                    onTap: () async {
+                      int x = selectedIndex + 1;
+
+                      var response =
+                          await HttpClientManager.client.get(Urls.get_items(x.toString()));
+                      if(response.statusCode==200)
+                      {
+                        
+                      }
+
+                      
                     },
                   ),
                 );

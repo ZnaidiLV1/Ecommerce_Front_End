@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 class items {
+  int item_id;
   String item_name;
   String item_desc;
   String item_image;
@@ -10,7 +11,9 @@ class items {
   int item_price;
   int item_discount;
   int item_cat;
+  bool item_favorite;
   items({
+    required this.item_id,
     required this.item_name,
     required this.item_desc,
     required this.item_image,
@@ -19,9 +22,11 @@ class items {
     required this.item_price,
     required this.item_discount,
     required this.item_cat,
+    required this.item_favorite,
   });
 
   items copyWith({
+    int? item_id,
     String? item_name,
     String? item_desc,
     String? item_image,
@@ -30,8 +35,10 @@ class items {
     int? item_price,
     int? item_discount,
     int? item_cat,
+    bool? item_favorite,
   }) {
     return items(
+      item_id: item_id ?? this.item_id,
       item_name: item_name ?? this.item_name,
       item_desc: item_desc ?? this.item_desc,
       item_image: item_image ?? this.item_image,
@@ -40,11 +47,13 @@ class items {
       item_price: item_price ?? this.item_price,
       item_discount: item_discount ?? this.item_discount,
       item_cat: item_cat ?? this.item_cat,
+      item_favorite: item_favorite ?? this.item_favorite,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'item_id': item_id,
       'item_name': item_name,
       'item_desc': item_desc,
       'item_image': item_image,
@@ -53,11 +62,13 @@ class items {
       'item_price': item_price,
       'item_discount': item_discount,
       'item_cat': item_cat,
+      'item_favorite': item_favorite,
     };
   }
 
   factory items.fromMap(Map<String, dynamic> map) {
     return items(
+      item_id: map['item_id'] as int,
       item_name: map['item_name'] as String,
       item_desc: map['item_desc'] as String,
       item_image: map['item_image'] as String,
@@ -66,16 +77,18 @@ class items {
       item_price: map['item_price'] as int,
       item_discount: map['item_discount'] as int,
       item_cat: map['item_cat'] as int,
+      item_favorite: map['item_favorite'] as bool,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory items.fromJson(String source) => items.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory items.fromJson(String source) =>
+      items.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'items(item_name: $item_name, item_desc: $item_desc, item_image: $item_image, item_count: $item_count, item_active: $item_active, item_price: $item_price, item_discount: $item_discount, item_cat: $item_cat)';
+    return 'items(item_id: $item_id, item_name: $item_name, item_desc: $item_desc, item_image: $item_image, item_count: $item_count, item_active: $item_active, item_price: $item_price, item_discount: $item_discount, item_cat: $item_cat, item_favorite: $item_favorite)';
   }
 
   @override
@@ -83,6 +96,7 @@ class items {
     if (identical(this, other)) return true;
   
     return 
+      other.item_id == item_id &&
       other.item_name == item_name &&
       other.item_desc == item_desc &&
       other.item_image == item_image &&
@@ -90,18 +104,21 @@ class items {
       other.item_active == item_active &&
       other.item_price == item_price &&
       other.item_discount == item_discount &&
-      other.item_cat == item_cat;
+      other.item_cat == item_cat &&
+      other.item_favorite == item_favorite;
   }
 
   @override
   int get hashCode {
-    return item_name.hashCode ^
+    return item_id.hashCode ^
+      item_name.hashCode ^
       item_desc.hashCode ^
       item_image.hashCode ^
       item_count.hashCode ^
       item_active.hashCode ^
       item_price.hashCode ^
       item_discount.hashCode ^
-      item_cat.hashCode;
+      item_cat.hashCode ^
+      item_favorite.hashCode;
   }
 }
