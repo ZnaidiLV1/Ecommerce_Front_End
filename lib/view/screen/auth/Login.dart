@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontendproject/controller/IdUser.dart';
 import 'package:frontendproject/controller/LoadingController.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/functions/AlertExit.dart';
@@ -9,6 +10,7 @@ import 'package:frontendproject/view/widget/auth/login/LoginButton.dart';
 import 'package:frontendproject/view/widget/auth/login/SignUpLine.dart';
 import 'package:frontendproject/view/widget/auth/login/TextField.dart';
 import 'package:frontendproject/view/widget/auth/login/TopDesign.dart';
+import 'package:get/get.dart';
 
 class login extends StatefulWidget {
   const login({super.key});
@@ -24,7 +26,8 @@ class _loginState extends State<login> {
   @override
   void initState() {
     super.initState();
-    emailcontroller = TextEditingController();
+    final IdUserController userController = Get.put(IdUserController());
+        emailcontroller = TextEditingController();
     passwordcontroller = TextEditingController();
   }
 

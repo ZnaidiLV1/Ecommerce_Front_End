@@ -1,12 +1,16 @@
 import 'dart:convert';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontendproject/controller/IdUser.dart';
 import 'package:frontendproject/controller/LoadingController.dart';
+import 'package:frontendproject/controller/refreshTokenController.dart';
 import 'package:frontendproject/core/constant/ClientSingleton.dart';
 import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/functions/CustumizedDialog.dart';
 import 'package:frontendproject/view/screen/Home/HomePage.dart';
+import 'package:get/get.dart';
 
 class loginButton extends StatefulWidget {
   TextEditingController emailField;
@@ -24,6 +28,7 @@ class loginButton extends StatefulWidget {
 }
 
 class _loginButtonState extends State<loginButton> {
+  final IdUserController iduserController = Get.find<IdUserController>();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -50,21 +55,24 @@ class _loginButtonState extends State<loginButton> {
                       body: {
                         // "email": widget.emailField.text,
                         // "password": widget.passwordField.text,
-                        "email":"vegasznaidi@gmail.com",
-                        "password":"2002 Znaidi" ,
+                        "email": "vegasznaidi@gmail.com",
+                        "password": "2002 Znaidi",
                       },
                     );
                     if (!mounted) {
-                      print('Widget is no longer mounted');
                       return;
                     }
-                    print("response");
                     context.read<LoadingController>().add(StopLoading());
 
                     if (response.statusCode == 200) {
                       var responseData = json.decode(response.body);
                       var refreshToken = responseData["refresh"];
-
+                      BlocProvider.of<TokenBloc>(context)
+                          .add(TokenEvent(refreshToken: refreshToken));
+                      final jwt = JWT.decode(refreshToken);
+                      final payload = jwt.payload;
+                      int id = payload["id"];
+                      iduserController.updateIdUser(id.toString());
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) =>

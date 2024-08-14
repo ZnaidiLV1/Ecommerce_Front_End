@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last
 
 import 'dart:convert';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontendproject/controller/refreshTokenController.dart';
 import 'package:frontendproject/core/constant/ClientSingleton.dart';
 import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
@@ -12,7 +15,7 @@ import 'package:http/http.dart';
 import 'package:like_button/like_button.dart';
 
 class home extends StatefulWidget {
-  const home({super.key});
+  home({super.key});
 
   @override
   State<home> createState() => _homeState();
@@ -22,6 +25,7 @@ class _homeState extends State<home> {
   int selectedIndex = 0;
   late Future<List<category>> cat_list;
   late Future<List<items>> items_list;
+  late Future<List<bool>> items_bool;
 
   Future<List<category>> get_cat_list() async {
     List<category> list = [];
@@ -47,6 +51,59 @@ class _homeState extends State<home> {
     }
   }
 
+  Future<List<bool>> get_bool_list(String id_user, String item_cat) async {
+    List<bool> items_bool = [];
+    try {
+      Uri uri = Uri.parse(
+          "http://10.0.2.2:8000/app1/${item_cat}-${id_user}-get_cat_favorite/");
+      Response response = await HttpClientManager.client.get(uri);
+      print("ooo");
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+
+        items_bool = data.map((item) {
+          if (item is bool) {
+            return item;
+          } else {
+            print('Unexpected item type: ${item.runtimeType}');
+            return false;
+          }
+        }).toList();
+      } else {
+        throw Exception(
+            'Failed to load favorite items. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching bool list: $e');
+    }
+
+    return items_bool;
+  }
+
+  String get_id_user() {
+    int id = 0;
+    final tokenBloc = context.read<TokenBloc>();
+    if (tokenBloc.state is AccessToken) {
+      String refresh = (tokenBloc.state as AccessToken).refreshToken;
+      final jwt = JWT.decode(refresh);
+      final payload = jwt.payload;
+      id = payload["id"];
+    }
+    return id.toString();
+  }
+
+  String get_email_user() {
+    String email = "";
+    final tokenBloc = context.read<TokenBloc>();
+    if (tokenBloc.state is AccessToken) {
+      String refresh = (tokenBloc.state as AccessToken).refreshToken;
+      final jwt = JWT.decode(refresh);
+      final payload = jwt.payload;
+      email = payload["email"];
+    }
+    return email;
+  }
+
   Future<List<items>> get_items_list_x(String x) async {
     List<items> itemslist = [];
     var data = await HttpClientManager.client.get(Urls.get_items(x));
@@ -59,16 +116,26 @@ class _homeState extends State<home> {
     }
   }
 
-  Future<bool> toggleFavorite(int itemId, bool currentStatus) async {
+  Future<bool> toggleFavorite(
+      int itemId, bool currentStatus, String email_user) async {
     try {
-      final response = await HttpClientManager.client.put(
-        Urls.update_favorite(),
-        body: {'item_id': itemId.toString()},
-      );
-      if (response.statusCode == 200) {
-        return !currentStatus;
+      if (!currentStatus) {
+        final response = await HttpClientManager.client.post(
+            Urls.create_favorite(),
+            body: {"email": email_user, "item_id": itemId.toString()});
+        if (response.statusCode == 200) {
+          return !currentStatus;
+        } else {
+          throw Exception('Failed to update favorite status');
+        }
       } else {
-        throw Exception('Failed to update favorite status');
+        final response = await HttpClientManager.client
+            .delete(Urls.delete_favorite(), body: {"fav_item": itemId.toString()});
+        if (response.statusCode == 200) {
+          return !currentStatus;
+        } else {
+          throw Exception('Failed to update favorite status');
+        }
       }
     } catch (e) {
       throw Exception('Failed to update favorite status: $e');
@@ -78,8 +145,19 @@ class _homeState extends State<home> {
   @override
   void initState() {
     super.initState();
-    cat_list = get_cat_list();
-    items_list = get_items_list();
+
+    final tokenBloc = context.read<TokenBloc>();
+
+    if (tokenBloc.state is AccessToken) {
+      String refreshToken = (tokenBloc.state as AccessToken).refreshToken;
+      final jwt = JWT.decode(refreshToken);
+      final payload = jwt.payload;
+      String id = payload["id"].toString();
+
+      cat_list = get_cat_list();
+      items_list = get_items_list();
+      items_bool = get_bool_list(id, "1");
+    }
   }
 
   @override
@@ -139,6 +217,11 @@ class _homeState extends State<home> {
                                         selectedIndex = index;
                                         items_list = get_items_list_x(
                                             (index + 1).toString());
+                                        items_bool = get_bool_list(
+                                            get_id_user(),
+                                            categories[index]
+                                                .cat_id
+                                                .toString());
                                       });
                                     },
                                   ),
@@ -193,9 +276,7 @@ class _homeState extends State<home> {
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            SizedBox(
-                                                width:
-                                                    4), 
+                                            SizedBox(width: 4),
                                             Text(
                                               "${items_all[index].item_price}",
                                               style: TextStyle(
@@ -203,35 +284,69 @@ class _homeState extends State<home> {
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            Spacer(), 
-                                            LikeButton(
-                                              size: 30,
-                                              circleColor: CircleColor(
-                                                start: Color(0xff00ddff),
-                                                end: Color(0xff0099cc),
-                                              ),
-                                              bubblesColor: BubblesColor(
-                                                dotPrimaryColor:
-                                                    Color(0xff33b5e5),
-                                                dotSecondaryColor:
-                                                    Color(0xff0099cc),
-                                              ),
-                                              isLiked: items_all[index].item_favorite,
-                                            likeBuilder: (bool isLiked) {
-                                              return Icon(
-                                                Icons.favorite,
-                                                color: isLiked ? Colors.pink : Colors.grey,
-                                                size: 30,
-                                              );
-                                            },
-                                               onTap: (bool isLiked) async {
-                                                bool newStatus = await toggleFavorite(items_all[index].item_id, isLiked);
-                                                setState(() {
-                                                  items_all[index].item_favorite = newStatus;
-                                                });
-                                                return newStatus;
-                                              }
-                                            ),
+                                            Spacer(),
+                                            FutureBuilder(
+                                                future: items_bool,
+                                                builder: (context, snapshot) {
+                                                  if (snapshot
+                                                          .connectionState ==
+                                                      ConnectionState.waiting) {
+                                                    return CircularProgressIndicator();
+                                                  } else if (snapshot
+                                                      .hasError) {
+                                                    return Center(
+                                                      child: Icon(Icons
+                                                          .warning_outlined),
+                                                    );
+                                                  } else {
+                                                    final items_bool =
+                                                        snapshot.data!;
+                                                    return LikeButton(
+                                                      size: 30,
+                                                      circleColor: CircleColor(
+                                                        start:
+                                                            Color(0xff00ddff),
+                                                        end: Color(0xff0099cc),
+                                                      ),
+                                                      bubblesColor:
+                                                          BubblesColor(
+                                                        dotPrimaryColor:
+                                                            Color(0xff33b5e5),
+                                                        dotSecondaryColor:
+                                                            Color(0xff0099cc),
+                                                      ),
+                                                      isLiked:
+                                                          items_bool[index],
+                                                      likeBuilder:
+                                                          (bool isLiked) {
+                                                        return Icon(
+                                                          Icons.favorite,
+                                                          color: isLiked
+                                                              ? Colors.pink
+                                                              : Colors.grey,
+                                                          size: 30,
+                                                        );
+                                                      },
+                                                      onTap:
+                                                          (bool isLiked) async {
+                                                        bool newStatus =
+                                                            await toggleFavorite(
+                                                          items_all[index]
+                                                              .item_id,
+                                                          isLiked,
+                                                          get_email_user(),
+                                                        );
+
+                                                        // setState(() {
+                                                        //   items_bool[index] =
+                                                        //       newStatus;
+                                                        // });
+
+                                                        return newStatus;
+                                                      },
+                                                    );
+                                                  }
+                                                }),
                                           ],
                                         ),
                                       ),

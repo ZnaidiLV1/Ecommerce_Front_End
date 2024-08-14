@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontendproject/bindings.dart';
 import 'package:frontendproject/controller/DotsController.dart';
+import 'package:frontendproject/controller/IdUser.dart';
 import 'package:frontendproject/controller/LoadingController.dart';
 import 'package:frontendproject/controller/midleware.dart';
 import 'package:frontendproject/controller/refreshTokenController.dart';
@@ -14,6 +15,7 @@ import 'package:get/get.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Get.putAsync(() => myServices().init());
+  
   runApp(MyApp());
 }
 

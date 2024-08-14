@@ -33,8 +33,18 @@ class Urls {
   static Uri get_items(String item_cat) {
     return Uri.parse("${server}app1/${item_cat}-get_items/");
   }
-  static Uri update_favorite() {
-    return Uri.parse("${server}app1/update_favorite/");
+  static Uri get_favorite(String id_user) {
+    return Uri.parse("${server}app1/${id_user}-get_favorites/");
   }
+  static Uri create_favorite() {
+    return Uri.parse("${server}app1/create_favorite/");
+  }
+  static Uri delete_favorite() {
+    return Uri.parse("${server}app1/delete_favorite/");
+  }
+  static Uri get_cat_favorite(String id_user,String item_cat) {
+    return Uri.parse("${server}app1/${item_cat}-${id_user}-get_cat_favorite/");
+  }
+
 
 }

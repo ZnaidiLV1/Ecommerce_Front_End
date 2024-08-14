@@ -11,7 +11,6 @@ class items {
   int item_price;
   int item_discount;
   int item_cat;
-  bool item_favorite;
   items({
     required this.item_id,
     required this.item_name,
@@ -22,7 +21,6 @@ class items {
     required this.item_price,
     required this.item_discount,
     required this.item_cat,
-    required this.item_favorite,
   });
 
   items copyWith({
@@ -35,7 +33,6 @@ class items {
     int? item_price,
     int? item_discount,
     int? item_cat,
-    bool? item_favorite,
   }) {
     return items(
       item_id: item_id ?? this.item_id,
@@ -47,7 +44,6 @@ class items {
       item_price: item_price ?? this.item_price,
       item_discount: item_discount ?? this.item_discount,
       item_cat: item_cat ?? this.item_cat,
-      item_favorite: item_favorite ?? this.item_favorite,
     );
   }
 
@@ -62,7 +58,6 @@ class items {
       'item_price': item_price,
       'item_discount': item_discount,
       'item_cat': item_cat,
-      'item_favorite': item_favorite,
     };
   }
 
@@ -77,18 +72,16 @@ class items {
       item_price: map['item_price'] as int,
       item_discount: map['item_discount'] as int,
       item_cat: map['item_cat'] as int,
-      item_favorite: map['item_favorite'] as bool,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory items.fromJson(String source) =>
-      items.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory items.fromJson(String source) => items.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'items(item_id: $item_id, item_name: $item_name, item_desc: $item_desc, item_image: $item_image, item_count: $item_count, item_active: $item_active, item_price: $item_price, item_discount: $item_discount, item_cat: $item_cat, item_favorite: $item_favorite)';
+    return 'items(item_id: $item_id, item_name: $item_name, item_desc: $item_desc, item_image: $item_image, item_count: $item_count, item_active: $item_active, item_price: $item_price, item_discount: $item_discount, item_cat: $item_cat)';
   }
 
   @override
@@ -104,8 +97,7 @@ class items {
       other.item_active == item_active &&
       other.item_price == item_price &&
       other.item_discount == item_discount &&
-      other.item_cat == item_cat &&
-      other.item_favorite == item_favorite;
+      other.item_cat == item_cat;
   }
 
   @override
@@ -118,7 +110,7 @@ class items {
       item_active.hashCode ^
       item_price.hashCode ^
       item_discount.hashCode ^
-      item_cat.hashCode ^
-      item_favorite.hashCode;
+      item_cat.hashCode;
   }
 }
+
