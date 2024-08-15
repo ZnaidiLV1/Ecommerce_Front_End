@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontendproject/bindings.dart';
 import 'package:frontendproject/controller/DotsController.dart';
+import 'package:frontendproject/controller/Favorite_item_controller.dart';
 import 'package:frontendproject/controller/IdUser.dart';
 import 'package:frontendproject/controller/LoadingController.dart';
 import 'package:frontendproject/controller/midleware.dart';
@@ -23,6 +24,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
   localeController locale = Get.put(localeController());
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -30,9 +32,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => PageBloc(),
         ),
-        BlocProvider(create: (_)=>LoadingController()),
-        BlocProvider(create: (_)=>MidlewareBloc()..add(MidlewareEvent())),
-        BlocProvider(create: (_)=>TokenBloc()),
+        BlocProvider(create: (_) => LoadingController()),
+        BlocProvider(create: (_) => MidlewareBloc()..add(MidlewareEvent())),
+        BlocProvider(create: (_) => TokenBloc()),
+        BlocProvider(create: (_)=>FavoriteBloc()),
       ],
       child: GetMaterialApp(
         initialBinding: InitialBinding(),

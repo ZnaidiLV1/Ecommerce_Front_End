@@ -25,7 +25,6 @@ List widgets = [
 class _homePageState extends State<homePage> {
   void onTapped(index_tapped) {
     setState(() {
-      print("index tapped $index_tapped");
       index = index_tapped;
     });
   }

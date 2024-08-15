@@ -1,3 +1,4 @@
+import 'package:frontendproject/controller/Favorite_item_controller.dart';
 import 'package:frontendproject/core/blocservice/Services.dart';
 import 'package:frontendproject/core/localisation/ChangeLocal.dart';
 import 'package:get/get.dart';

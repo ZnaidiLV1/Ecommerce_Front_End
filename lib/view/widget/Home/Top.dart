@@ -13,27 +13,7 @@ class _topState extends State<top> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-                padding: EdgeInsets.only(
-                  left: 20,
-                ),
-                child: Icon(
-                  Icons.menu,
-                  color: ConstColors.primarycolor,
-                  size: 40,
-                )),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.22,
-              child: ClipRRect(
-                child: Image.asset("images/logo.jpg"),
-                borderRadius: BorderRadius.circular(60),
-              ),
-            ),
-          ],
-        ),
+        
         Padding(
           padding: EdgeInsets.only(
               left: 20.0,
