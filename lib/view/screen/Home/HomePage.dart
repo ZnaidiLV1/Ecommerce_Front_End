@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/view/screen/Home/HomePage/Favorite.dart';
 import 'package:frontendproject/view/screen/Home/HomePage/Home.dart';
+import 'package:frontendproject/view/screen/Home/HomePage/Settings.dart';
 
 class homePage extends StatefulWidget {
   String refreshToken;
@@ -20,6 +21,7 @@ List widgets = [
   Favorite(),
   Placeholder(),
   Placeholder(),
+  Settings(),
 ];
 
 class _homePageState extends State<homePage> {
@@ -60,6 +62,10 @@ class _homePageState extends State<homePage> {
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Profile',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
             ),
           ],
         ),

@@ -110,7 +110,6 @@ class _FavoriteState extends State<Favorite> {
                       ),
                       BlocBuilder<FavoriteBloc, FAvoriteState>(
                         builder: (context, state) {
-                          // if (state is FavoriteChanged) {
                             if (state.items_list.isEmpty) {
                               return Center(
                                 child: Text("No Favorite Added"),
@@ -128,7 +127,6 @@ class _FavoriteState extends State<Favorite> {
                                 },
                               );
                             }
-                          // }
                         },
                       )
                     ],
