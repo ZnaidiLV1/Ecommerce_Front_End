@@ -45,6 +45,9 @@ class Urls {
   static Uri get_cat_favorite(String id_user,String item_cat) {
     return Uri.parse("${server}app1/${item_cat}-${id_user}-get_cat_favorite/");
   }
+  static Uri get_items_cart(String id_user,) {
+    return Uri.parse("${server}app1/${id_user}-get_carts/");
+  }
 
 
 }

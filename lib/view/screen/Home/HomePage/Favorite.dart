@@ -11,6 +11,7 @@ import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/serializer/Items.dart';
 import 'package:frontendproject/view/widget/Favotite/Favorite_list_tile.dart';
+import 'package:frontendproject/view/widget/Favotite/top_favorite.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:like_button/like_button.dart';
@@ -66,67 +67,28 @@ class _FavoriteState extends State<Favorite> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Icon(
-                              Icons.menu,
-                              color: ConstColors.primarycolor,
-                              size: 40,
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.22,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(60),
-                              child: Image.asset("images/logo.jpg"),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.06),
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          "My Favorite",
-                          style: TextStyle(
-                              fontSize: 40, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.06),
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          "Check Your Favorite Items",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey),
-                        ),
-                      ),
+                      top_favorite(
+                          title: "My Favorite",
+                          sub_title: "Check Your Favortie Items"),
                       BlocBuilder<FavoriteBloc, FAvoriteState>(
                         builder: (context, state) {
-                            if (state.items_list.isEmpty) {
-                              return Center(
-                                child: Text("No Favorite Added"),
-                              );
-                            } else {
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: state.items_list.length,
-                                itemBuilder: (context, index) {
-                                  return favorite_list_tile(
-                                    index: index,
-                                    fav_items: state.items_list,
-                                  );
-                                },
-                              );
-                            }
+                          if (state.items_list.isEmpty) {
+                            return Center(
+                              child: Text("No Favorite Added"),
+                            );
+                          } else {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: state.items_list.length,
+                              itemBuilder: (context, index) {
+                                return favorite_list_tile(
+                                  index: index,
+                                  fav_items: state.items_list,
+                                );
+                              },
+                            );
+                          }
                         },
                       )
                     ],

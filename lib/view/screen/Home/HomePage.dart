@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/view/screen/Home/HomePage/Favorite.dart';
 import 'package:frontendproject/view/screen/Home/HomePage/Home.dart';
+import 'package:frontendproject/view/screen/Home/HomePage/Market.dart';
 import 'package:frontendproject/view/screen/Home/HomePage/Settings.dart';
 
 class homePage extends StatefulWidget {
@@ -19,7 +20,7 @@ class homePage extends StatefulWidget {
 List widgets = [
   home(),
   Favorite(),
-  Placeholder(),
+  Market(),
   Placeholder(),
   Settings(),
 ];
@@ -56,8 +57,8 @@ class _homePageState extends State<homePage> {
               label: 'Favorite',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Search',
+              icon: Icon(Icons.shop_sharp),
+              label: 'Market',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
