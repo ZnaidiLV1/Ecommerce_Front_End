@@ -14,7 +14,6 @@ import 'package:frontendproject/view/widget/Favotite/Favorite_list_tile.dart';
 import 'package:frontendproject/view/widget/Favotite/top_favorite.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:like_button/like_button.dart';
 
 class Favorite extends StatefulWidget {
   const Favorite({super.key});

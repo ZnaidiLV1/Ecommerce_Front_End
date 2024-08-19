@@ -337,11 +337,6 @@ class _homeState extends State<home> {
                                                           get_email_user(),
                                                         );
 
-                                                        // setState(() {
-                                                        //   items_bool[index] =
-                                                        //       newStatus;
-                                                        // });
-
                                                         return newStatus;
                                                       },
                                                     );

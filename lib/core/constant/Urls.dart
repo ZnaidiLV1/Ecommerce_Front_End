@@ -48,6 +48,17 @@ class Urls {
   static Uri get_items_cart(String id_user,) {
     return Uri.parse("${server}app1/${id_user}-get_carts/");
   }
-
+  static Uri get_quantity_list(String id_user,) {
+    return Uri.parse("${server}app1/${id_user}-get_quantity_list/");
+  }
+  static Uri cart_add_quantity() {
+    return Uri.parse("${server}app1/cart_add_quantity/");
+  }
+  static Uri cart_remove_quantity() {
+    return Uri.parse("${server}app1/cart_remove_quantity/");
+  }
+  static Uri get_all_carts(String idUser) {
+    return Uri.parse("${server}app1/${idUser}-get_all_carts/");
+  }
 
 }

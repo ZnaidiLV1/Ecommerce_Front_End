@@ -5,6 +5,7 @@ import 'package:frontendproject/controller/DotsController.dart';
 import 'package:frontendproject/controller/Favorite_item_controller.dart';
 import 'package:frontendproject/controller/IdUser.dart';
 import 'package:frontendproject/controller/LoadingController.dart';
+import 'package:frontendproject/controller/market_item_controller.dart';
 import 'package:frontendproject/controller/midleware.dart';
 import 'package:frontendproject/controller/refreshTokenController.dart';
 import 'package:frontendproject/core/blocservice/Services.dart';
@@ -16,7 +17,7 @@ import 'package:get/get.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Get.putAsync(() => myServices().init());
-  
+
   runApp(MyApp());
 }
 
@@ -35,7 +36,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => LoadingController()),
         BlocProvider(create: (_) => MidlewareBloc()..add(MidlewareEvent())),
         BlocProvider(create: (_) => TokenBloc()),
-        BlocProvider(create: (_)=>FavoriteBloc()),
+        BlocProvider(create: (_) => FavoriteBloc()),
+        BlocProvider(create: (_) => MarketController())
       ],
       child: GetMaterialApp(
         initialBinding: InitialBinding(),
