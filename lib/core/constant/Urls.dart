@@ -60,5 +60,11 @@ class Urls {
   static Uri get_all_carts(String idUser) {
     return Uri.parse("${server}app1/${idUser}-get_all_carts/");
   }
+  static Uri item_add_quantity() {
+    return Uri.parse("${server}app1/item_add_quantity/");
+  }
+  static Uri item_remove_quantity() {
+    return Uri.parse("${server}app1/cart_remove_quantity/");
+  }
 
 }

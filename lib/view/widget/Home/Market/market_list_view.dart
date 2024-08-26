@@ -1,15 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_literals_to_create_immutables, prefer_const_constructors
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontendproject/controller/market_item_controller.dart';
-import 'package:frontendproject/core/constant/ClientSingleton.dart';
-import 'package:frontendproject/core/constant/Urls.dart';
 
+import 'package:flutter/material.dart';
+import 'package:frontendproject/controller/MarketUIController.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/serializer/Cart.dart';
 import 'package:frontendproject/core/serializer/Items.dart';
-import 'package:http/http.dart' as http;
 
+// ignore: must_be_immutable
 class Market_list_view extends StatelessWidget {
   List<items> items_list;
   List<Cart> carts_list;
@@ -83,7 +80,18 @@ class Market_list_view extends StatelessWidget {
                                     left: MediaQuery.of(context).size.width *
                                         0.2),
                                 child: IconButton(
-                                    onPressed: () {},
+                                  
+                                    onPressed: () async {
+                                      if(carts_list[index].cart_quantity>1)
+                                      {
+                                          remove_button_pushed(items_list,
+                                          carts_list, index, context);
+                                      }
+                                      else 
+                                      {
+                                        null;
+                                      }
+                                    },
                                     icon: Icon(
                                       Icons.remove,
                                       size: 30,
@@ -103,21 +111,16 @@ class Market_list_view extends StatelessWidget {
                               Container(
                                 child: IconButton(
                                     onPressed: () async {
-                                      http.Response response =
-                                          await HttpClientManager.client.put(
-                                              Urls.cart_add_quantity(),
-                                              body: {
-                                            "cart_id": carts_list[index]
-                                                .cart_id
-                                                .toString()
-                                          });
-                                      if (response.statusCode == 200) {
-                                        // http.Response response_carts=
-                                        BlocProvider.of<MarketController>(
-                                                context)
-                                            .add(MarketChanged(
-                                                items_list: items_list,
-                                                carts_list: carts_list));
+                                     
+                                          if(items_list[index].item_count>0 )
+                                      {
+                                        
+                                          add_button_pushed(items_list, carts_list,
+                                          index, context);
+                                      }
+                                      else 
+                                      {
+                                        null;
                                       }
                                     },
                                     icon: Icon(
@@ -127,7 +130,7 @@ class Market_list_view extends StatelessWidget {
                                     )),
                               )
                             ],
-                          )
+                          ),
                         ],
                       ),
                     )),
