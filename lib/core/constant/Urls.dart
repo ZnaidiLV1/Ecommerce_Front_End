@@ -66,5 +66,8 @@ class Urls {
   static Uri item_remove_quantity() {
     return Uri.parse("${server}app1/cart_remove_quantity/");
   }
+   static Uri delete_cart() {
+    return Uri.parse("${server}app1/delete_cart/");
+  }
 
 }

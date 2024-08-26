@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontendproject/core/serializer/Cart.dart';
@@ -24,10 +23,23 @@ class MarketChanged extends MarketEvent {
   });
 
   @override
-  List<Object?> get props => [items_list,carts_list];
+  List<Object?> get props => [items_list, carts_list];
 }
 
-// Define States
+// // ignore: must_be_immutable
+// class MarketDeleted extends MarketEvent {
+//   List<items> items_list;
+//   List<Cart> carts_list;
+//   MarketDeleted({
+//     required this.items_list,
+//     required this.carts_list,
+//   });
+
+//   @override
+//   List<Object?> get props => [items_list, carts_list];
+// }
+
+
 abstract class MarketState extends Equatable {
   const MarketState();
 
@@ -52,21 +64,35 @@ class MarketLoaded extends MarketState {
   List<Object?> get props => [items_list, price, carts_list];
 }
 
-// Market Controller
 class MarketController extends Bloc<MarketEvent, MarketState> {
   MarketController() : super(MarketInitial()) {
     on<MarketChanged>((event, emit) async {
       int total_price = 0;
 
       for (int i = 0; i < event.items_list.length; i++) {
-        total_price += event.items_list[i].item_price * event.carts_list[i].cart_quantity;
-
-        emit(MarketLoaded(
-          items_list: event.items_list,
-          price: total_price,
-          carts_list: event.carts_list,
-        ));
+        total_price +=
+            event.items_list[i].item_price * event.carts_list[i].cart_quantity;
       }
+
+      emit(MarketLoaded(
+        items_list: event.items_list,
+        price: total_price,
+        carts_list: event.carts_list,
+      ));
     });
+    // on<MarketDeleted>((event, emit) async {
+    //   int total_price = 0;
+
+    //   for (int i = 0; i < event.items_list.length; i++) {
+    //     total_price +=
+    //         event.items_list[i].item_price * event.carts_list[i].cart_quantity;
+    //   }
+    //   print(total_price);
+    //   emit(MarketLoaded(
+    //     items_list: event.items_list,
+    //     price: total_price,
+    //     carts_list: event.carts_list,
+    //   ));
+    // });
   }
 }

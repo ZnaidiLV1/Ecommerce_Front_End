@@ -10,6 +10,7 @@ import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/serializer/Items.dart';
 import 'package:frontendproject/core/serializer/category.dart';
+import 'package:frontendproject/view/screen/Home/item_tapped.dart';
 import 'package:frontendproject/view/widget/Home/Top.dart';
 import 'package:http/http.dart';
 import 'package:like_button/like_button.dart';
@@ -129,8 +130,9 @@ class _homeState extends State<home> {
           throw Exception('Failed to update favorite status');
         }
       } else {
-        final response = await HttpClientManager.client
-            .delete(Urls.delete_favorite(), body: {"fav_item": itemId.toString()});
+        final response = await HttpClientManager.client.delete(
+            Urls.delete_favorite(),
+            body: {"fav_item": itemId.toString()});
         if (response.statusCode == 200) {
           return !currentStatus;
         } else {
@@ -262,109 +264,123 @@ class _homeState extends State<home> {
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              "£",
-                                              style: TextStyle(
-                                                color: ConstColors.primarycolor,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                              builder: (context) => Item_Tapped(
+                                                    item: items_all[index],
+                                                  )));
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                "£",
+                                                style: TextStyle(
+                                                  color:
+                                                      ConstColors.primarycolor,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(width: 4),
-                                            Text(
-                                              "${items_all[index].item_price}",
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
+                                              SizedBox(width: 4),
+                                              Text(
+                                                "${items_all[index].item_price}",
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
-                                            ),
-                                            Spacer(),
-                                            FutureBuilder(
-                                                future: items_bool,
-                                                builder: (context, snapshot) {
-                                                  if (snapshot
-                                                          .connectionState ==
-                                                      ConnectionState.waiting) {
-                                                    return CircularProgressIndicator();
-                                                  } else if (snapshot
-                                                      .hasError) {
-                                                    return Center(
-                                                      child: Icon(Icons
-                                                          .warning_outlined),
-                                                    );
-                                                  } else {
-                                                    final items_bool =
-                                                        snapshot.data!;
-                                                    return LikeButton(
-                                                      size: 30,
-                                                      circleColor: CircleColor(
-                                                        start:
-                                                            Color(0xff00ddff),
-                                                        end: Color(0xff0099cc),
-                                                      ),
-                                                      bubblesColor:
-                                                          BubblesColor(
-                                                        dotPrimaryColor:
-                                                            Color(0xff33b5e5),
-                                                        dotSecondaryColor:
-                                                            Color(0xff0099cc),
-                                                      ),
-                                                      isLiked:
-                                                          items_bool[index],
-                                                      likeBuilder:
-                                                          (bool isLiked) {
-                                                        return Icon(
-                                                          Icons.favorite,
-                                                          color: isLiked
-                                                              ? Colors.pink
-                                                              : Colors.grey,
-                                                          size: 30,
-                                                        );
-                                                      },
-                                                      onTap:
-                                                          (bool isLiked) async {
-                                                        bool newStatus =
-                                                            await toggleFavorite(
-                                                          items_all[index]
-                                                              .item_id,
-                                                          isLiked,
-                                                          get_email_user(),
-                                                        );
+                                              Spacer(),
+                                              FutureBuilder(
+                                                  future: items_bool,
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return CircularProgressIndicator();
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Center(
+                                                        child: Icon(Icons
+                                                            .warning_outlined),
+                                                      );
+                                                    } else {
+                                                      final items_bool =
+                                                          snapshot.data!;
+                                                      return LikeButton(
+                                                        size: 30,
+                                                        circleColor:
+                                                            CircleColor(
+                                                          start:
+                                                              Color(0xff00ddff),
+                                                          end:
+                                                              Color(0xff0099cc),
+                                                        ),
+                                                        bubblesColor:
+                                                            BubblesColor(
+                                                          dotPrimaryColor:
+                                                              Color(0xff33b5e5),
+                                                          dotSecondaryColor:
+                                                              Color(0xff0099cc),
+                                                        ),
+                                                        isLiked:
+                                                            items_bool[index],
+                                                        likeBuilder:
+                                                            (bool isLiked) {
+                                                          return Icon(
+                                                            Icons.favorite,
+                                                            color: isLiked
+                                                                ? Colors.pink
+                                                                : Colors.grey,
+                                                            size: 30,
+                                                          );
+                                                        },
+                                                        onTap: (bool
+                                                            isLiked) async {
+                                                          bool newStatus =
+                                                              await toggleFavorite(
+                                                            items_all[index]
+                                                                .item_id,
+                                                            isLiked,
+                                                            get_email_user(),
+                                                          );
 
-                                                        return newStatus;
-                                                      },
-                                                    );
-                                                  }
-                                                }),
-                                          ],
-                                        ),
-                                      ),
-                                      // Item image
-                                      Container(
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.22,
-                                        child: Image.asset(
-                                            items_all[index].item_image),
-                                      ),
-                                      // Item name
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "${items_all[index].item_name}",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
+                                                          return newStatus;
+                                                        },
+                                                      );
+                                                    }
+                                                  }),
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        // Item image
+                                        Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.22,
+                                          child: Image.asset(
+                                              items_all[index].item_image),
+                                        ),
+                                        // Item name
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "${items_all[index].item_name}",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
                               },
