@@ -10,9 +10,11 @@ import 'package:frontendproject/view/widget/itemTapped/TopContainer.dart';
 
 class Item_Tapped extends StatelessWidget {
   items item;
+  bool like_button_bool;
   Item_Tapped({
     Key? key,
     required this.item,
+    required this.like_button_bool,
   }) : super(key: key);
 
   @override
@@ -21,7 +23,15 @@ class Item_Tapped extends StatelessWidget {
       backgroundColor: ConstColors.secondcolor,
       body: SafeArea(
         child: Column(
-          children: [TopContainer(item: item,), Spacer(), BottomConatainer(item: item,)],
+          children: [
+            TopContainer(
+              item: item, like_button_bool: like_button_bool,
+            ),
+            Spacer(),
+            BottomConatainer(
+              item: item,
+            )
+          ],
         ),
       ),
     );

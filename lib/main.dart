@@ -4,6 +4,7 @@ import 'package:frontendproject/bindings.dart';
 import 'package:frontendproject/controller/DotsController.dart';
 import 'package:frontendproject/controller/Favorite_item_controller.dart';
 import 'package:frontendproject/controller/IdUser.dart';
+import 'package:frontendproject/controller/ItemController/quantityNumber.dart';
 import 'package:frontendproject/controller/LoadingController.dart';
 import 'package:frontendproject/controller/market_item_controller.dart';
 import 'package:frontendproject/controller/midleware.dart';
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => MidlewareBloc()..add(MidlewareEvent())),
         BlocProvider(create: (_) => TokenBloc()),
         BlocProvider(create: (_) => FavoriteBloc()),
-        BlocProvider(create: (_) => MarketController())
+        BlocProvider(create: (_) => MarketController()),
+        BlocProvider(create: (_) => QuantityBloc()),
       ],
       child: GetMaterialApp(
         initialBinding: InitialBinding(),

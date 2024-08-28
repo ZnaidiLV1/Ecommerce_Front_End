@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontendproject/controller/ItemController/ItemController.dart';
+import 'package:frontendproject/controller/ItemController/quantityNumber.dart';
 import 'package:frontendproject/controller/refreshTokenController.dart';
 import 'package:frontendproject/core/constant/ClientSingleton.dart';
 import 'package:frontendproject/core/constant/Urls.dart';
@@ -93,18 +95,6 @@ class _homeState extends State<home> {
     return id.toString();
   }
 
-  String get_email_user() {
-    String email = "";
-    final tokenBloc = context.read<TokenBloc>();
-    if (tokenBloc.state is AccessToken) {
-      String refresh = (tokenBloc.state as AccessToken).refreshToken;
-      final jwt = JWT.decode(refresh);
-      final payload = jwt.payload;
-      email = payload["email"];
-    }
-    return email;
-  }
-
   Future<List<items>> get_items_list_x(String x) async {
     List<items> itemslist = [];
     var data = await HttpClientManager.client.get(Urls.get_items(x));
@@ -117,37 +107,19 @@ class _homeState extends State<home> {
     }
   }
 
-  Future<bool> toggleFavorite(
-      int itemId, bool currentStatus, String email_user) async {
-    try {
-      if (!currentStatus) {
-        final response = await HttpClientManager.client.post(
-            Urls.create_favorite(),
-            body: {"email": email_user, "item_id": itemId.toString()});
-        if (response.statusCode == 200) {
-          return !currentStatus;
-        } else {
-          throw Exception('Failed to update favorite status');
-        }
-      } else {
-        final response = await HttpClientManager.client.delete(
-            Urls.delete_favorite(),
-            body: {"fav_item": itemId.toString()});
-        if (response.statusCode == 200) {
-          return !currentStatus;
-        } else {
-          throw Exception('Failed to update favorite status');
-        }
-      }
-    } catch (e) {
-      throw Exception('Failed to update favorite status: $e');
-    }
-  }
-
   @override
   void initState() {
     super.initState();
+    fetchData();
+  }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fetchData();
+  }
+
+  void fetchData() {
     final tokenBloc = context.read<TokenBloc>();
 
     if (tokenBloc.state is AccessToken) {
@@ -162,6 +134,7 @@ class _homeState extends State<home> {
     }
   }
 
+  bool bool_tosend=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -265,12 +238,19 @@ class _homeState extends State<home> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: InkWell(
-                                    onTap: () {
+                                    onTap: () async {
+                                      BlocProvider.of<QuantityBloc>(context)
+                                          .add(QuantityChanged(quantity: 1));
+
+                                      List<bool> isLiked = await items_bool;
+
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
-                                              builder: (context) => Item_Tapped(
-                                                    item: items_all[index],
-                                                  )));
+                                        builder: (context) => Item_Tapped(
+                                          item: items_all[index],
+                                          like_button_bool: isLiked[index],
+                                        ),
+                                      ));
                                     },
                                     child: Column(
                                       children: [
@@ -348,12 +328,14 @@ class _homeState extends State<home> {
                                                             items_all[index]
                                                                 .item_id,
                                                             isLiked,
-                                                            get_email_user(),
+                                                            get_email_user(
+                                                                context),
                                                           );
-
+                                                          bool_tosend =
+                                                              newStatus;
                                                           return newStatus;
                                                         },
-                                                      );
+                                                     );
                                                     }
                                                   }),
                                             ],
