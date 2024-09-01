@@ -73,6 +73,7 @@ class _loginButtonState extends State<loginButton> {
                       final payload = jwt.payload;
                       int id = payload["id"];
                       iduserController.updateIdUser(id.toString());
+                      print("user is ${iduserController.getIdUser}");
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) =>

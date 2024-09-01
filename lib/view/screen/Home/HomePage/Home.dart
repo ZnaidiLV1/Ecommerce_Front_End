@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontendproject/controller/IdUser.dart';
 import 'package:frontendproject/controller/ItemController/ItemController.dart';
 import 'package:frontendproject/controller/ItemController/quantityNumber.dart';
 import 'package:frontendproject/controller/refreshTokenController.dart';
@@ -14,7 +15,9 @@ import 'package:frontendproject/core/serializer/Items.dart';
 import 'package:frontendproject/core/serializer/category.dart';
 import 'package:frontendproject/view/screen/Home/item_tapped.dart';
 import 'package:frontendproject/view/widget/Home/Top.dart';
-import 'package:http/http.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:http/http.dart'as http;
 import 'package:like_button/like_button.dart';
 
 class home extends StatefulWidget {
@@ -59,8 +62,8 @@ class _homeState extends State<home> {
     try {
       Uri uri = Uri.parse(
           "http://10.0.2.2:8000/app1/${item_cat}-${id_user}-get_cat_favorite/");
-      Response response = await HttpClientManager.client.get(uri);
-      print("ooo");
+      http.Response response = await HttpClientManager.client.get(uri);
+      
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
 
@@ -135,6 +138,7 @@ class _homeState extends State<home> {
   }
 
   bool bool_tosend=false;
+  final IdUserController iduserController = Get.find<IdUserController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,16 +243,18 @@ class _homeState extends State<home> {
                                   ),
                                   child: InkWell(
                                     onTap: () async {
+                                      
                                       BlocProvider.of<QuantityBloc>(context)
                                           .add(QuantityChanged(quantity: 1));
 
                                       List<bool> isLiked = await items_bool;
-
+       http.Response response_tapped =await HttpClientManager.client.get(Urls.is_in_cart(iduserController.getIdUser, items_all[index].item_id.toString()));
+        bool data=json.decode(response_tapped.body);
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
                                         builder: (context) => Item_Tapped(
                                           item: items_all[index],
-                                          like_button_bool: isLiked[index],
+                                          like_button_bool: isLiked[index], item_tapped: data,
                                         ),
                                       ));
                                     },

@@ -69,5 +69,8 @@ class Urls {
    static Uri delete_cart() {
     return Uri.parse("${server}app1/delete_cart/");
   }
+  static Uri is_in_cart(String cart_user,String cart_item) {
+    return Uri.parse("${server}app1/${cart_user}-${cart_item}-is_in_cart/");
+  }
 
 }

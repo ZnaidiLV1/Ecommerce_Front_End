@@ -10,10 +10,12 @@ import 'package:frontendproject/view/widget/itemTapped/TopContainer.dart';
 
 class Item_Tapped extends StatelessWidget {
   items item;
+  bool item_tapped;
   bool like_button_bool;
   Item_Tapped({
     Key? key,
     required this.item,
+    required this.item_tapped,
     required this.like_button_bool,
   }) : super(key: key);
 
@@ -29,7 +31,7 @@ class Item_Tapped extends StatelessWidget {
             ),
             Spacer(),
             BottomConatainer(
-              item: item,
+              item: item, item_added: item_tapped,
             )
           ],
         ),

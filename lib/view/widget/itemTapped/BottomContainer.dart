@@ -2,15 +2,17 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:frontendproject/core/constant/colors.dart';
 
+import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/serializer/Items.dart';
 
 class BottomConatainer extends StatelessWidget {
   items item;
+  bool item_added;
   BottomConatainer({
     Key? key,
     required this.item,
+    required this.item_added,
   }) : super(key: key);
   int price_after_discount(int price, int discount) {
     return price - (price * discount) ~/ 100;
@@ -40,6 +42,7 @@ class BottomConatainer extends StatelessWidget {
             padding: EdgeInsets.only(left: 25, top: 10),
           ),
           Container(
+            height: MediaQuery.of(context).size.height * 0.21,
             alignment: Alignment.topLeft,
             padding: EdgeInsets.only(left: 25, right: 25),
             child: Text(
@@ -52,7 +55,7 @@ class BottomConatainer extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 15),
+            padding: EdgeInsets.only(top: 10),
             child: Row(
               children: [
                 SizedBox(
@@ -167,16 +170,67 @@ class BottomConatainer extends StatelessWidget {
                   ),
           ),
           Container(
-              margin: EdgeInsets.only(top: 15, left: 25, right: 25),
-              decoration: BoxDecoration(
-                  color: ConstColors.thirdcolor,
-                  borderRadius: BorderRadius.circular(30)),
-              height: MediaQuery.of(context).size.height * 0.09,
-              child: Row(
-                children: [],
-              ),
-              ),
-              
+            margin: EdgeInsets.only(top: 5, left: 25, right: 25),
+            decoration: BoxDecoration(
+                color: ConstColors.thirdcolor,
+                borderRadius: BorderRadius.circular(30)),
+            height: MediaQuery.of(context).size.height * 0.09,
+            child: Row(
+              children: [],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 25, right: 25, top: 10),
+            decoration: BoxDecoration(
+                color: ConstColors.primarycolor,
+                borderRadius: BorderRadius.circular(40)),
+            height: MediaQuery.of(context).size.height * 0.08,
+            child: item_added
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Item Added",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: "Sans",
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Icon(
+                        Icons.shopping_bag_outlined,
+                        size: 30,
+                        color: Colors.white,
+                      )
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Add To Market",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: "Sans",
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Icon(
+                        Icons.shopping_bag_outlined,
+                        size: 30,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+          ),
         ],
       ),
     );
