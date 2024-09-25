@@ -1,5 +1,16 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:frontendproject/controller/all_items.dart';
+import 'package:frontendproject/core/constant/ClientSingleton.dart';
+import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
+import 'package:frontendproject/core/serializer/Items.dart';
+import 'package:frontendproject/view/screen/Home/item_tapped.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class top extends StatefulWidget {
   const top({super.key});
@@ -13,48 +24,44 @@ class _topState extends State<top> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        
         Padding(
           padding: EdgeInsets.only(
               left: 20.0,
               right: 20,
               top: MediaQuery.of(context).size.width * 0.15),
-          child: TextFormField(
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              hintStyle: TextStyle(
-                fontWeight: FontWeight.w200,
-              ),
-              hintText: 'Find What You Want',
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 15.0, horizontal: 16.0),
-              suffixIcon: Container(
-                margin: EdgeInsets.only(right: 15),
-                padding: EdgeInsets.all(12.0),
+          child: InkWell(
+              onTap: () {
+                showSearch(context: context, delegate: CustomSearch());
+              },
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.08,
                 decoration: BoxDecoration(
-                  color: ConstColors.primarycolor,
-                  borderRadius: BorderRadius.circular(80),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(40)),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: Text(
+                        "Tap here to search",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.grey[600],
+                            fontFamily: 'SANS',
+                            fontSize: 18),
+                      ),
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: CircleAvatar(
+                        backgroundColor: ConstColors.primarycolor,
+                        child: Icon(Icons.search, color: Colors.white),
+                      ),
+                    )
+                  ],
                 ),
-                child: Icon(Icons.search, color: Colors.white),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30.0),
-                borderSide: BorderSide.none,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30.0),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30.0),
-                borderSide: BorderSide.none,
-              ),
-            ),
-            style: TextStyle(
-              fontFamily: "Sans",
-            ),
-          ),
+              )),
         ),
         Container(
           padding: EdgeInsets.only(
@@ -70,6 +77,63 @@ class _topState extends State<top> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class CustomSearch extends SearchDelegate {
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+          onPressed: () {
+            query = "";
+          },
+          icon: Icon(Icons.close))
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          close(context, null);
+        },
+        icon: Icon(Icons.arrow_back));
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Text("");
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    All_items allItemsController = Get.find();
+
+    List<String> filteredItems = allItemsController.get_all_items
+        .where((item) => item.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    return ListView.builder(
+      itemCount: filteredItems.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(filteredItems[index]),
+          onTap: () async {
+            http.Response response = await HttpClientManager.client
+                .get(Urls.get_item(filteredItems[index]));
+                print('Response body: ${response.body}');
+            if (response.statusCode == 200) {
+              Map<String, dynamic> data = json.decode(response.body);
+              items item = items.fromMap(data);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Item_Tapped(
+                      item: item, item_tapped: true, like_button_bool: true)));
+            }
+          },
+        );
+      },
     );
   }
 }

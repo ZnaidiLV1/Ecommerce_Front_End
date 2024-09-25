@@ -1,7 +1,14 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontendproject/controller/IdUser.dart';
 import 'package:frontendproject/controller/LoadingController.dart';
+import 'package:frontendproject/controller/all_items.dart';
+import 'package:frontendproject/core/constant/ClientSingleton.dart';
+import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/functions/AlertExit.dart';
 import 'package:frontendproject/view/screen/auth/ForgetPassword.dart';
@@ -11,6 +18,7 @@ import 'package:frontendproject/view/widget/auth/login/SignUpLine.dart';
 import 'package:frontendproject/view/widget/auth/login/TextField.dart';
 import 'package:frontendproject/view/widget/auth/login/TopDesign.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class login extends StatefulWidget {
   const login({super.key});
@@ -22,13 +30,26 @@ class login extends StatefulWidget {
 class _loginState extends State<login> {
   late TextEditingController emailcontroller;
   late TextEditingController passwordcontroller;
+  void get_all_items() async {
+    http.Response response =
+        await HttpClientManager.client.get(Urls.get_all_items());
+    if (response.statusCode == 200) {
+      All_items allItemsController = Get.put(All_items());
+      List<dynamic> items = json.decode(response.body);
+      List<String> stringItems = items.map((item) => item.toString()).toList();
+    allItemsController.set_items(stringItems);
+  
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    final All_items allItemsController = Get.put(All_items());
     final IdUserController userController = Get.put(IdUserController());
-        emailcontroller = TextEditingController();
+    emailcontroller = TextEditingController();
     passwordcontroller = TextEditingController();
+    get_all_items();
   }
 
   @override

@@ -2,9 +2,15 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:frontendproject/controller/IdUser.dart';
+import 'package:frontendproject/core/constant/ClientSingleton.dart';
+import 'package:frontendproject/core/constant/Urls.dart';
 
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/serializer/Items.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:http/http.dart' as http;
 
 class BottomConatainer extends StatelessWidget {
   items item;
@@ -16,6 +22,17 @@ class BottomConatainer extends StatelessWidget {
   }) : super(key: key);
   int price_after_discount(int price, int discount) {
     return price - (price * discount) ~/ 100;
+  }
+
+  String dropdownValue = '4/64';
+  List<String> get_quantity_list() {
+    List<String> quantityList = [];
+
+    for (int i = 1; i <= item.item_count; i++) {
+      quantityList.add(i.toString());
+    }
+
+    return quantityList;
   }
 
   @override
@@ -139,7 +156,7 @@ class BottomConatainer extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        "Initial Price :    ",
+                        "After Discount Price :    ",
                         style: TextStyle(
                             fontSize: 18,
                             fontFamily: 'Sans',
@@ -176,7 +193,63 @@ class BottomConatainer extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30)),
             height: MediaQuery.of(context).size.height * 0.09,
             child: Row(
-              children: [],
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                //tap here
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "RAM/ROM",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 18),
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        onChanged: (String? newValue) {},
+                        items: <String>[
+                          '4/64',
+                          '8/128',
+                          '8/256',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "QTY",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 18),
+                      child: DropdownButton<String>(
+                        value: '1',
+                        onChanged: (String? newValue) {},
+                        items: get_quantity_list()
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           Container(
@@ -208,27 +281,49 @@ class BottomConatainer extends StatelessWidget {
                       )
                     ],
                   )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Add To Market",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: "Sans",
-                          color: Colors.white,
+                : InkWell(
+                    onTap: () async {
+                      final IdUserController idUserController =
+                          Get.find<IdUserController>();
+                      http.Response response = await HttpClientManager.client
+                          .post(Urls.add_in_market(), body: {
+                        'cart_item': item.item_id.toString(),
+                        'cart_user': idUserController.getIdUser.toString(),
+                        'cart_quantity': '1',
+                        'cart_count': item.item_count.toString(),
+                      });
+                      if (response.statusCode == 200) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text('${item.item_name} added to the market'),
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      }
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Add To Market",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Sans",
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Icon(
-                        Icons.shopping_bag_outlined,
-                        size: 30,
-                        color: Colors.white,
-                      )
-                    ],
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Icon(
+                          Icons.shopping_bag_outlined,
+                          size: 30,
+                          color: Colors.white,
+                        )
+                      ],
+                    ),
                   ),
           ),
         ],

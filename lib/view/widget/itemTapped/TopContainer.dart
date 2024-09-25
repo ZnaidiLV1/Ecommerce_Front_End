@@ -40,11 +40,12 @@ class TopContainer extends StatelessWidget {
                         if (state is AccessToken) {
                           return IconButton(
                               onPressed: () {
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
-                                        builder: (context) => homePage(
-                                              refreshToken: state.refreshToken,
-                                            )));
+                                // Navigator.of(context)
+                                //     .pushReplacement(MaterialPageRoute(
+                                //         builder: (context) => homePage(
+                                //               refreshToken: state.refreshToken,
+                                //             )));
+                                Navigator.of(context).pop();
                               },
                               icon: Icon(
                                 Icons.arrow_back_ios_new_rounded,

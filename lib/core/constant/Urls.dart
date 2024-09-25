@@ -73,4 +73,16 @@ class Urls {
     return Uri.parse("${server}app1/${cart_user}-${cart_item}-is_in_cart/");
   }
 
+  static Uri add_in_market() {
+    return Uri.parse("${server}app1/create_cart/");
+  }
+
+  static Uri get_all_items() {
+    return Uri.parse("${server}app1/get_all_items/");
+  }
+
+  static Uri get_item(String name) {
+    return Uri.parse("${server}app1/${name}-get_item/");
+  }
+
 }
