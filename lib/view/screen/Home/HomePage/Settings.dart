@@ -1,8 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontendproject/controller/refreshTokenController.dart';
+import 'package:frontendproject/core/constant/ClientSingleton.dart';
+import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
+import 'package:frontendproject/view/screen/auth/Login.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -119,36 +125,59 @@ class _SettingsState extends State<Settings> {
                       tileColor: ConstColors.thirdcolor,
                       trailing: Icon(
                         size: 40,
-                        Icons.phone_callback_outlined,
+                        Icons.language,
                         color: ConstColors.primarycolor,
                       ),
-                      title: Text("Contact Us",
+                      title: Text("Language",
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Sans')),
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: MediaQuery.of(context).size.width * 0.2,
-                    margin: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: ConstColors.thirdcolor,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: ListTile(
-                      tileColor: ConstColors.thirdcolor,
-                      trailing: Icon(
-                        size: 40,
-                        Icons.login_outlined,
-                        color: ConstColors.primarycolor,
-                      ),
-                      title: Text("Logout",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Sans')),
-                    ),
+                  BlocBuilder<TokenBloc,TokenState>(
+                    builder: (BuildContext context, state) {
+                      if (state is AccessToken) {
+                        return InkWell(
+                          onTap: () async {
+                            http.Response response = await HttpClientManager
+                                .client
+                                .post(Urls.logout(), body: {
+                              'refresh': state.refreshToken,
+                            });
+                            if (response.statusCode == 200) {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => login()),
+                                  (route) => false);
+                            }
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: MediaQuery.of(context).size.width * 0.2,
+                            margin: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: ConstColors.thirdcolor,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: ListTile(
+                              tileColor: ConstColors.thirdcolor,
+                              trailing: Icon(
+                                size: 40,
+                                Icons.login_outlined,
+                                color: ConstColors.primarycolor,
+                              ),
+                              title: Text("Logout",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Sans')),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
                   ),
                 ],
               ),

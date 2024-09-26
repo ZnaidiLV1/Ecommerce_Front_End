@@ -348,13 +348,16 @@ class _homeState extends State<home> {
                                           ),
                                         ),
                                         // Item image
-                                        Container(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.22,
-                                          child: Image.asset(
-                                              items_all[index].item_image),
+                                        Hero(
+                                          tag: items_all[index],
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.22,
+                                            child: Image.asset(
+                                                items_all[index].item_image),
+                                          ),
                                         ),
                                         // Item name
                                         Padding(

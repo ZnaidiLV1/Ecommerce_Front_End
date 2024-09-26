@@ -24,11 +24,32 @@ class _topState extends State<top> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 20),
+              child: Icon(
+                Icons.menu,
+                color: Colors.grey[400],
+                size: 40,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(right: 20),
+              width: MediaQuery.of(context).size.width * 0.13,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(60),
+                child: Image.asset("images/person_settings.png"),
+              ),
+            ),
+          ],
+        ),
         Padding(
           padding: EdgeInsets.only(
               left: 20.0,
               right: 20,
-              top: MediaQuery.of(context).size.width * 0.15),
+              top: MediaQuery.of(context).size.width * 0.04),
           child: InkWell(
               onTap: () {
                 showSearch(context: context, delegate: CustomSearch());
@@ -123,7 +144,7 @@ class CustomSearch extends SearchDelegate {
           onTap: () async {
             http.Response response = await HttpClientManager.client
                 .get(Urls.get_item(filteredItems[index]));
-                print('Response body: ${response.body}');
+            print('Response body: ${response.body}');
             if (response.statusCode == 200) {
               Map<String, dynamic> data = json.decode(response.body);
               items item = items.fromMap(data);

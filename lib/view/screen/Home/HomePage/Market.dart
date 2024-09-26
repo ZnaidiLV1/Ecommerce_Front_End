@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:frontendproject/core/constant/Urls.dart';
 import 'package:frontendproject/core/constant/colors.dart';
 import 'package:frontendproject/core/serializer/Cart.dart';
 import 'package:frontendproject/core/serializer/Items.dart';
+import 'package:frontendproject/view/screen/ChooseAddress/ChooseAddress.dart';
 import 'package:frontendproject/view/widget/Favotite/top_favorite.dart';
 import 'package:frontendproject/view/widget/Home/Market/market_list_view.dart';
 import 'package:get/get.dart';
@@ -128,7 +131,15 @@ class Market extends StatelessWidget {
                                 ),
                               ],
                             ),
+                          ),
+                          MaterialButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ChooseAddress()));
+                            },
+                            child: Text("tap here"),
                           )
+                          //lihkultg
                         ],
                       );
                     } else {

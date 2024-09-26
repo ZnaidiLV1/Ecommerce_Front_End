@@ -42,7 +42,9 @@ class _loginButtonState extends State<loginButton> {
         child: BlocBuilder<LoadingController, LoadingState>(
           builder: (context, state) {
             if (state is LoadingInProgress) {
-              return CircularProgressIndicator();
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             } else {
               return MaterialButton(
                 onPressed: () async {

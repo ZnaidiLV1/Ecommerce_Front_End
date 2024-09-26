@@ -14,7 +14,6 @@ class PageState {
   PageState(this.currentPage);
 }
 
-
 class PageBloc extends Bloc<eventPage, PageState> {
   PageBloc() : super(PageState(0)) {
     on<pageChanged>((event, emit) {

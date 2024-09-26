@@ -128,9 +128,12 @@ class TopContainer extends StatelessWidget {
               )
             ],
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.23,
-            child: Image.asset(item.item_image),
+          Hero(
+            tag: item,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.23,
+              child: Image.asset(item.item_image),
+            ),
           ),
         ],
       ),
